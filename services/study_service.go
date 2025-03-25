@@ -18,3 +18,15 @@ func AddStudy(title, author string, year int, referenceRange, category, doi stri
 	result := database.DB.Create(&study)
 	return result.Error
 }
+
+func GetAllStudies() ([]models.Study, error) {
+	var studies []models.Study
+	result := database.DB.Find(&studies)
+	return studies, result.Error
+}
+
+func GetStudiesByUser(userID uint) ([]models.Study, error) {
+	var studies []models.Study
+	result := database.DB.Where("user_id = ?", userID).Find(&studies)
+	return studies, result.Error
+}
