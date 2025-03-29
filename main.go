@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/SethGK/refhub/database"
@@ -11,23 +10,15 @@ import (
 )
 
 func main() {
-	// Connect to the database and run migrations
-	database.ConnectDB()
-	database.DB.AutoMigrate(&models.User{}, &models.Study{})
 
-	// Initialize the Gin router
-	r := gin.Default()
+	database.Connect()
 
-	// Setup the application routes
-	r.GET("/", func(c *gin.Context) {
-		c.String(200, "RefHub API is running!")
-	})
-	routes.SetupRoutes(r)
-
-	// Start the server on port 8080
-	port := 8080
-	fmt.Printf("Server is running on http://localhost:%d\n", port)
-	if err := r.Run(fmt.Sprintf(":%d", port)); err != nil {
-		log.Fatal("Failed to run server: ", err)
+	if err := database.DB.AutoMigrate(&models.User{}, &models.ReferenceRange{}, &models.Study{}); err != nil {
+		log.Fatal("Migration failed:", err)
 	}
+
+	router := gin.Default()
+	routes.SetupRoutes(router)
+
+	router.Run(":8080")
 }
