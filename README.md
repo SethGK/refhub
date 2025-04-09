@@ -4,7 +4,7 @@
 
 ---
 
-## ✨ Features
+##  Features
 
 * **User registration and login** with JWT authentication
 * **CRUD operations** for:
@@ -16,7 +16,7 @@
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 * **Language**: Go 1.22
 * **Web Framework**: Gin
@@ -27,9 +27,9 @@
 
 ---
 
-## 🚀 Initial Set Up
+##  Initial Set Up
 
-### 🔧 Prerequisites
+###  Prerequisites
 
 * **Docker** & **Docker Compose** installed
 * **Go** (if running locally without Docker)
@@ -37,7 +37,7 @@
 
 ---
 
-### ⚙️ Local Setup (without Docker)
+###  Local Setup (without Docker)
 
 1.  **Copy environment file:**
     ```bash
@@ -56,7 +56,7 @@
     go run main.go
     ```
 
-### 🐳 Docker Setup
+###  Docker Setup
 
 1.  **Clone the repository:**
     ```bash
@@ -73,7 +73,7 @@
 3.  **Access the application:**
     The app will be running at `http://localhost:8080`.
 
-### 🔐 Authentication
+###  Authentication
 
 1.  **Register a new user:**
     Send a `POST` request to the `/register` endpoint with user credentials (e.g., username, password) in the request body.
@@ -87,7 +87,7 @@
     Authorization: Bearer <your_jwt_token>
     ```
 
-### 📂 API Endpoints
+###  API Endpoints
 
 | Method | Route                 | Description                                  | Authentication Required | Request Body (Example)                  |
 | :----- | :-------------------- | :------------------------------------------- | :-------------------- | :-------------------------------------- |
@@ -97,13 +97,13 @@
 | `POST` | `/reference_ranges`  | Create a new reference range                 | Yes                   | `{"name": "...", "min": ..., "max": ...}` |
 | `PUT`  | `/reference_ranges/:id` | Update an existing reference range (by ID) | Yes                   | `{"name": "...", "min": ..., "max": ...}` |
 | `DELETE` | `/reference_ranges/:id` | Delete a reference range (by ID)           | Yes                   | None                                    |
-| `GET`  | `/studies`           | Get all medical studies                      | Yes (Likely)          | None                                    |
-| `POST` | `/studies`           | Create a new medical study                   | Yes (Likely)          | `{"name": "...", "description": "..."}`  |
-| `PUT`  | `/studies/:id`       | Update an existing medical study (by ID)     | Yes (Likely)          | `{"name": "...", "description": "..."}`  |
-| `DELETE` | `/studies/:id`       | Delete a medical study (by ID)             | Yes (Likely)          | None                                    |
+| `GET`  | `/studies`           | Get all medical studies                      | Yes           | None                                    |
+| `POST` | `/studies`           | Create a new medical study                   | Yes          | `{"name": "...", "description": "..."}`  |
+| `PUT`  | `/studies/:id`       | Update an existing medical study (by ID)     | Yes           | `{"name": "...", "description": "..."}`  |
+| `DELETE` | `/studies/:id`       | Delete a medical study (by ID)             | Yes           | None                                    |
 
 **Note:** The `/studies` endpoints likely also require authentication, although it's not explicitly stated in the "Features" section.
 
-### 📄 License
+###  License
 
 MIT — feel free to use, fork, and modify.
