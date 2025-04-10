@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function LoginForm({ onLogin }) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,8 +19,8 @@ function LoginForm({ onLogin }) {
       });
       const data = await response.json();
       if (response.ok) {
-        onLogin(data.token); // Pass token to App
-        navigate('/reference-ranges'); // Redirect to reference ranges page
+        onLogin(data.token);
+        navigate('/'); // Redirect to the dashboard or home page
       } else {
         setMessage(`Login failed: ${data.error}`);
       }
