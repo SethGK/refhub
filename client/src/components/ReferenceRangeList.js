@@ -11,6 +11,7 @@ function ReferenceRangeList({ ranges, onEdit, onDelete }) {
           <thead>
             <tr>
               <th>Analyte</th>
+              <th>Department</th>
               <th>Lower Bound</th>
               <th>Upper Bound</th>
               <th>Unit</th>
@@ -22,6 +23,7 @@ function ReferenceRangeList({ ranges, onEdit, onDelete }) {
             {ranges.map((range) => (
               <tr key={range.id}>
                 <td>{range.analyte_name}</td>
+                <td>{range.department}</td>
                 <td>{range.lower_bound}</td>
                 <td>{range.upper_bound}</td>
                 <td>{range.unit}</td>

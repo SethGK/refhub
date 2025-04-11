@@ -9,4 +9,5 @@ type ReferenceRange struct {
 	Note        string  `json:"note"`
 	UserID      uint    `gorm:"not null" json:"user_id"`
 	StudyID     *uint   `json:"study_id"` // Optional association with a study
+	Department  string  `gorm:"default:null" json:"department"`
 }

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing }) {
+function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, departments }) {
   const [formData, setFormData] = useState(initialValues);
 
   useEffect(() => {
@@ -9,7 +9,6 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing }) {
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-    
     // Convert numeric inputs to numbers before storing in state
     if (type === 'number') {
       setFormData({ ...formData, [name]: value === '' ? '' : Number(value) });
@@ -20,17 +19,19 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
-    // Validation (basic)
-    if (!formData.analyte_name || 
-        formData.lower_bound === '' || 
-        formData.upper_bound === '' || 
-        !formData.unit) {
+    // Basic validation: ensure required fields are present
+    if (
+      !formData.analyte_name ||
+      formData.lower_bound === '' ||
+      formData.upper_bound === '' ||
+      !formData.unit ||
+      !formData.department
+    ) {
       alert('Please fill in all required fields.');
       return;
     }
     
-    // Make sure numeric fields are converted to numbers before submission
+    // Convert numeric fields to numbers
     const dataToSubmit = {
       ...formData,
       lower_bound: Number(formData.lower_bound),
@@ -86,6 +87,21 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing }) {
           value={formData.note || ''} 
           onChange={handleChange} 
         />
+
+        <label>Department:</label>
+        <select
+          name="department"
+          value={formData.department || ''}
+          onChange={handleChange}
+          required
+        >
+          <option value="">Select Department</option>
+          {departments.map((dept) => (
+            <option key={dept} value={dept}>
+              {dept}
+            </option>
+          ))}
+        </select>
 
         <button type="submit">{editing ? 'Update' : 'Create'}</button>
         {onCancel && <button type="button" onClick={onCancel}>Cancel</button>}

@@ -60,5 +60,10 @@ func SetupRoutes(router *gin.Engine) {
 		authorized.GET("/studies", controllers.GetStudies)
 		authorized.PUT("/studies/:id", controllers.UpdateStudy)
 		authorized.DELETE("/studies/:id", controllers.DeleteStudy)
+
+		// Department endpoints
+		authorized.POST("/departments", controllers.CreateDepartment)
+		authorized.GET("/departments", controllers.GetDepartments)
+		authorized.DELETE("/departments/:id", controllers.DeleteDepartment)
 	}
 }

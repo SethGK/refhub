@@ -110,3 +110,31 @@ export const deleteStudy = async (token, id) => {
   });
   return handleResponse(response);
 };
+
+// Departments
+export const fetchDepartments = async (token) => {
+  const response = await fetch(`${BASE_URL}/departments`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return handleResponse(response);
+};
+
+export const createDepartment = async (token, data) => {
+  const response = await fetch(`${BASE_URL}/departments`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+  return handleResponse(response);
+};
+
+export const deleteDepartment = async (token, deptId) => {
+  const response = await fetch(`${BASE_URL}/departments/${deptId}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return handleResponse(response);
+};
