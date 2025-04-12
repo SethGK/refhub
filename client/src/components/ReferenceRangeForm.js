@@ -8,21 +8,13 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
   }, [initialValues]);
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
 
-    // For number fields like min_age and max_age, convert to number (or empty string)
-    if ((name === 'min_age' || name === 'max_age') && type === 'number') {
-      setFormData({ 
-        ...formData, 
-        [name]: value === '' ? '' : Number(value) 
-      });
-    } else if (name === 'pregnancy') {
-      // For pregnancy, treat as a string (will convert later)
-      setFormData({ ...formData, [name]: value });
-    } else {
-      // For lower_bound and upper_bound and all other fields, keep as string
-      setFormData({ ...formData, [name]: value });
-    }
+    // All values are treated as strings now
+    setFormData({ 
+      ...formData, 
+      [name]: value 
+    });
   };
 
   const handleSubmit = (e) => {
@@ -51,13 +43,17 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
     
     const dataToSubmit = {
       ...formData,
-      // lower_bound and upper_bound remain as strings
-      min_age: formData.min_age === '' ? null : Number(formData.min_age),
-      max_age: formData.max_age === '' ? null : Number(formData.max_age),
+      min_age: formData.min_age === '' ? null : formData.min_age,
+      max_age: formData.max_age === '' ? null : formData.max_age,
       pregnancy: pregnancyValue,
     };
 
-    onSubmit(dataToSubmit);
+    // When editing, pass the id separately to the onSubmit callback.
+    if (editing) {
+      onSubmit(formData.id, dataToSubmit);
+    } else {
+      onSubmit(dataToSubmit);
+    }
   };
 
   return (
@@ -66,6 +62,15 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
         {editing ? 'Edit Reference Range' : 'Create New Reference Range'}
       </h3>
       <form onSubmit={handleSubmit} className="space-y-6">
+        {/* When editing, include the hidden ID field */}
+        {editing && (
+          <input
+            type="hidden"
+            name="id"
+            value={formData.id || ''}
+          />
+        )}
+
         {/* First Row: Analyte Name, Unit, Lower Bound, Upper Bound */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -91,7 +96,7 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
           <div>
             <label className="block text-gray-700 font-medium">Lower Bound:</label>
             <input
-              type="text"  // Changed to text for operators like "<" or ">"
+              type="text"
               name="lower_bound"
               value={formData.lower_bound || ''}
               onChange={handleChange}
@@ -102,7 +107,7 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
           <div>
             <label className="block text-gray-700 font-medium">Upper Bound:</label>
             <input
-              type="text" // Changed to text for operators like "<" or ">"
+              type="text"
               name="upper_bound"
               value={formData.upper_bound || ''}
               onChange={handleChange}
@@ -174,20 +179,20 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
           <div>
             <label className="block text-gray-700 font-medium">Min Age:</label>
             <input
-              type="number"
+              type="text"
               name="min_age"
               value={formData.min_age || ''}
               onChange={handleChange}
-              placeholder="Optional"
+              placeholder="e.g. 1 day, 2 months"
               className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
             <label className="block text-gray-700 font-medium mt-2">Max Age:</label>
             <input
-              type="number"
+              type="text"
               name="max_age"
               value={formData.max_age || ''}
               onChange={handleChange}
-              placeholder="Optional"
+              placeholder="e.g. 5 years, 18 years"
               className="w-full mt-1 px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-200"
             />
           </div>

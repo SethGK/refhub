@@ -10,8 +10,8 @@ type ReferenceRange struct {
 	UserID      uint   `gorm:"not null" json:"user_id"`
 	StudyID     *uint  `json:"study_id"` // Optional association with a study
 	Department  string `gorm:"default:null" json:"department"`
-	MinAge      *int   `json:"min_age"`
-	MaxAge      *int   `json:"max_age"`
+	MinAge      string `json:"min_age"`
+	MaxAge      string `json:"max_age"`
 	Sex         string `gorm:"default:''" json:"sex"`
 	Pregnancy   *bool  `json:"pregnancy"`
 }

@@ -44,30 +44,39 @@ func GetReferenceRanges(c *gin.Context) {
 	c.JSON(http.StatusOK, ranges)
 }
 
-// UpdateReferenceRange updates an existing reference range entry
 func UpdateReferenceRange(c *gin.Context) {
+	// Ensure the user is authenticated
 	userID, exists := c.Get("userID")
 	if !exists {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
 		return
 	}
+
+	// Extract the ID from the URL parameter
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
 		return
 	}
+
+	// Bind the JSON body to the input model
 	var input models.ReferenceRange
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Set the ID from the URL and ensure the user ID is set
 	input.ID = uint(id)
 	input.UserID = userID.(uint)
+
+	// Call the update service
 	if err := services.UpdateReferenceRange(&input); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+
 	c.JSON(http.StatusOK, input)
 }
 
