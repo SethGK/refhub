@@ -11,20 +11,37 @@ import (
 )
 
 func main() {
+	// Connect to the PostgreSQL database using GORM
 	database.Connect()
-	if err := database.DB.AutoMigrate(&models.User{}, &models.ReferenceRange{}, &models.Study{}, &models.Department{}); err != nil {
-		log.Fatal("Migration failed:", err)
+
+	// Auto-migrate models to keep schema up to date
+	err := database.DB.AutoMigrate(
+		&models.User{},
+		&models.ReferenceRange{},
+		&models.Study{},
+		&models.Department{},
+	)
+	if err != nil {
+		log.Fatal("Database migration failed:", err)
 	}
 
+	// Initialize Gin router
 	router := gin.Default()
 
-	config := cors.DefaultConfig()
-	config.AllowOrigins = []string{"http://localhost:3000"} // Allow requests from React app
-	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
-	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
-	router.Use(cors.New(config))
+	// CORS configuration to allow frontend access (e.g. React app on localhost:3000)
+	corsConfig := cors.DefaultConfig()
+	corsConfig.AllowOrigins = []string{"http://localhost:3000"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
 
+	// Apply CORS middleware
+	router.Use(cors.New(corsConfig))
+
+	// Set up routes from the routes package
 	routes.SetupRoutes(router)
 
-	router.Run(":8080")
+	// Run the server on port 8080
+	if err := router.Run(":8080"); err != nil {
+		log.Fatal("Failed to run server:", err)
+	}
 }

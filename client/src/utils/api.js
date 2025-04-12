@@ -84,24 +84,38 @@ export const createStudy = async (token, studyData) => {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(studyData),
+    body: JSON.stringify(studyData)
   });
-  return handleResponse(response);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(errorText || 'Failed to create study');
+  }
+
+  return response.json();
 };
+
 
 export const updateStudy = async (token, id, studyData) => {
   const response = await fetch(`${BASE_URL}/studies/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      'Authorization': `Bearer ${token}`
     },
-    body: JSON.stringify(studyData),
+    body: JSON.stringify(studyData)
   });
-  return handleResponse(response);
+  
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.error || 'Failed to update study');
+  }
+  
+  return response.json();
 };
+
 
 export const deleteStudy = async (token, id) => {
   const response = await fetch(`${BASE_URL}/studies/${id}`, {
