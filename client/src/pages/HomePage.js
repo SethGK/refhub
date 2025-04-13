@@ -3,35 +3,67 @@ import { Link } from 'react-router-dom';
 
 function HomePage() {
   return (
-    <div>
-      <h2>Welcome to RefHub</h2>
-      <p>
-        RefHub is a platform for managing reference ranges and studies.
-      </p>
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      
 
-      <div>
-        <h3>Get Started</h3>
-        <ul>
-          <li>
-            If you're new, <Link to="/register">create an account</Link> to get started.
-          </li>
-          <li>
-            If you already have an account, <Link to="/login">log in</Link> to access your data.
-          </li>
-        </ul>
-      </div>
+      {/* Hero Section */}
+      <main className="container mx-auto flex-grow p-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl font-extrabold text-gray-800 mb-4">
+            Welcome to RefHub
+          </h2>
+          <p className="text-lg text-gray-600">
+            The all-in-one platform for managing your medical studies and reference ranges.
+          </p>
+        </div>
 
-      <div>
-        <h3>Key Features</h3>
-        <ul>
-          <li>Manage reference ranges for various analytes.</li>
-          <li>Organize and track your research studies.</li>
-          <li>Secure authentication and data storage.</li>
-          {/* Add more features as you expand your application */}
-        </ul>
-      </div>
+        {/* Navigation Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {/* Studies Card */}
+          <Link to="/studies" className="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+            <div className="flex flex-col items-center">
+              <svg className="h-12 w-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 4H7a2 2 0 01-2-2V7a2 2 0 012-2h5l2 2h5a2 2 0 012 2v10a2 2 0 01-2 2z" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Studies</h3>
+              <p className="text-gray-600 text-center">
+                Manage your medical studies and track reference ranges with ease.
+              </p>
+            </div>
+          </Link>
 
-      {/* You can add more sections like contact information, support links, etc. */}
+          {/* Reference Ranges Card */}
+          <Link to="/reference-ranges" className="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+            <div className="flex flex-col items-center">
+              <svg className="h-12 w-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Reference Ranges</h3>
+              <p className="text-gray-600 text-center">
+                View and update medical reference ranges for various analytes.
+              </p>
+            </div>
+          </Link>
+
+          {/* Login Card */}
+          <Link to="/login" className="block bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition">
+            <div className="flex flex-col items-center">
+              <svg className="h-12 w-12 text-blue-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 17l-4 4m0 0l-4-4m4 4V3" />
+              </svg>
+              <h3 className="text-xl font-semibold text-gray-800 mb-2">Login</h3>
+              <p className="text-gray-600 text-center">
+                Securely access your account and manage your data.
+              </p>
+            </div>
+          </Link>
+        </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="bg-gray-200 py-4 text-center">
+        <p className="text-gray-600">© 2025 RefHub. All rights reserved.</p>
+      </footer>
     </div>
   );
 }
