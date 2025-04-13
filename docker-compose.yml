@@ -1,29 +1,30 @@
-version: "3.9"
-
+version: "3.8"
 services:
-  db:
-    image: postgres:15
-    restart: always
-    environment:
-      POSTGRES_USER: refhubuser
-      POSTGRES_PASSWORD: refhubpass
-      POSTGRES_DB: refhub
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
-  app:
-    build: .
-    depends_on:
-      - db
+  backend:
+    build:
+      context: ./ 
+      dockerfile: Dockerfile.backend
     ports:
       - "8080:8080"
     environment:
-      DATABASE_URL: postgres://refhubuser:refhubpass@db:5432/refhub?sslmode=disable
+      - DATABASE_URL=postgres://refhubuser:refhubpass@localhost:5432/refhub?sslmode=disable # Adjust as needed
+    depends_on:
+      - db
+  frontend:
+    build:
+      context: ./ 
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+  db: 
+    image: postgres:13-alpine
     volumes:
-      - .:/app
-    command: ["./refhub"]
-
+      - db_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=refhubuser
+      - POSTGRES_PASSWORD=refhubpass
+      - POSTGRES_DB=dbname
 volumes:
-  pgdata:
+  db_data: 

@@ -1,0 +1,34 @@
+# Dockerfile for the Go backend
+FROM golang:1.21-alpine AS builder
+
+# Set working directory inside the container
+WORKDIR /app
+
+# Copy go.mod and go.sum to download dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Copy the source code
+COPY . .
+
+# Build the Go application
+RUN go build -o refhub ./main.go
+
+# ---
+# Production Stage
+# ---
+FROM alpine:latest  
+WORKDIR /app
+
+# Copy the built binary from the builder stage
+COPY --from=builder /app/refhub ./refhub
+
+# Copy necessary files (e.g., .env, database migrations)
+COPY .env ./
+# If you have database migrations, copy them here
+
+# Expose the port your Go app listens on (e.g., 8080)
+EXPOSE 8080
+
+# Command to run the executable
+CMD ["./refhub"]
