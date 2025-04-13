@@ -1,109 +1,104 @@
-# RefRangeHub
+# 🧪 RefRangeHub - Medical Reference Management Platform
 
-**RefRangeHub** is a RESTful backend service built in **Go** using the **Gin** framework. It allows users to manage studies and their associated medical reference ranges. Built with **JWT authentication**, **PostgreSQL**, and **Docker**.
-
----
-
-##  Features
-
-* **User registration and login** with JWT authentication
-* **CRUD operations** for:
-    * Reference Ranges
-    * Medical Studies
-* **PostgreSQL database** integration with **GORM**
-* **Authentication middleware** to protect user data
-* **Minimal test suite** with `api_tests.sh`
+RefRangeHub is a web-based platform designed to help healthcare professionals and researchers efficiently manage medical studies, reference ranges, and departmental data. It provides robust tools to organize studies, track analyte-specific reference ranges, and categorize data by departments.
 
 ---
 
-##  Tech Stack
+## ✨ Features
 
-* **Language**: Go 1.22
-* **Web Framework**: Gin
-* **Database**: PostgreSQL
-* **ORM**: GORM
-* **Authentication**: JWT
-* **Containerization**: Docker & Docker Compose
+### 🔐 User Authentication
+- Secure registration and login
+- JWT token-based authentication
+
+### 📊 Reference Range Management
+- Create, view, update, and delete reference ranges
+- Associate reference ranges with departments
+- Filter and sort reference ranges by department
+  - Filter reference ranges by department, analyte name, and study.
+  - Sort reference ranges by analyte name, age, and date.
+- Specify reference ranges with detailed parameters:
+  - Analyte name and unit.
+  - Lower and upper bounds.
+  - General notes.
+  - Department association.
+  - Age range (min and max).
+  - Sex specification.
+  - Pregnancy status.
+  - Link to related studies.
+
+### 📚 Study Management
+- Create, view, update, and delete medical studies
+- Link reference ranges to specific studies
+- Provide study details:
+  - Study name and description.
+  - Publication date.
+  - Link to external resources.
+  - Associated reference ranges.
+
+### 🏥 Department Management
+- Create, view, and delete departments
+- Categorize reference ranges by department
 
 ---
 
-##  Initial Set Up
+## 🛠️ Technologies Used
 
-###  Prerequisites
+### Backend
+- **Go** – Core backend language
+- **Gin** – Web framework for routing and middleware
+- **GORM** – ORM for PostgreSQL
+- **PostgreSQL** – Relational database
+- **JWT** – JSON Web Token authentication
 
-* **Docker** & **Docker Compose** installed
-* **Go** (if running locally without Docker)
-* **PostgreSQL** (if running locally without Docker)
+### Frontend
+- **React** – Dynamic frontend interface
+- **Tailwind CSS** - Styling
 
 ---
 
-###  Local Setup (without Docker)
+## ⚙️ Setup Instructions
 
-1.  **Copy environment file:**
-    ```bash
-    cp .env.example .env
-    ```
-    Edit `.env` and fill in your PostgreSQL database connection URL.
+### Prerequisites
 
-2.  **Start PostgreSQL and create database:**
-    Ensure PostgreSQL is running and create the `refhub` database:
-    ```bash
-    createdb refhub
-    ```
+Before you begin, ensure you have the following installed:
 
-3.  **Run the application:**
-    ```bash
-    go run main.go
-    ```
+- **Go:** [https://golang.org/dl/](https://golang.org/dl/)
+- **PostgreSQL:** [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
+- **Node.js and npm:** [https://nodejs.org/](https://nodejs.org/) (for the React frontend)
+- **.env file:** Create a `.env` file in the backend root directory and add the following:
+  ```
+  DATABASE_URL=postgres://your_user:your_password@your_host:your_port/your_database
+  ```
+  Replace `your_user`, `your_password`, `your_host`, `your_port`, and `your_database` with your PostgreSQL credentials.
 
-###  Docker Setup
+### 1. Backend Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [https://github.com/SethGK/refhub.git](https://github.com/SethGK/refhub.git)
-    cd refhub
-    ```
+```bash
+# Clone the repository
+git clone <repository_url>
+cd backend  # Navigate to the backend directory
 
-2.  **Build and run with Docker Compose:**
-    ```bash
-    docker-compose up --build -d
-    ```
-    The `-d` flag runs the containers in detached mode (in the background).
+# Install Go dependencies
+go mod tidy
 
-3.  **Access the application:**
-    The app will be running at `http://localhost:8080`.
+# Run the backend server
+go run main.go
+```
 
-###  Authentication
+### 2. Frontend Setup
 
-1.  **Register a new user:**
-    Send a `POST` request to the `/register` endpoint with user credentials (e.g., username, password) in the request body.
+```bash
+cd frontend # Navigate to the frontend directory
 
-2.  **Log in and get JWT:**
-    Send a `POST` request to the `/login` endpoint with your registered username and password in the request body. The response will contain a **JWT token**.
+# Install Node.js dependencies
+npm install
 
-3.  **Authorize requests:**
-    For all protected routes, include the JWT token in the `Authorization` header as a **Bearer token**. For example:
-    ```
-    Authorization: Bearer <your_jwt_token>
-    ```
+# Start the frontend development server
+npm start
+```
 
-###  API Endpoints
+### 3. Database Setup
 
-| Method | Route                 | Description                                  | Authentication Required | Request Body (Example)                  |
-| :----- | :-------------------- | :------------------------------------------- | :-------------------- | :-------------------------------------- |
-| `POST` | `/register`          | Register a new user                          | No                    | `{"username": "...", "password": "..."}` |
-| `POST` | `/login`             | Login and receive a JWT token                | No                    | `{"username": "...", "password": "..."}` |
-| `GET`  | `/reference_ranges`  | Get all reference ranges                     | Yes                   | None                                    |
-| `POST` | `/reference_ranges`  | Create a new reference range                 | Yes                   | `{"name": "...", "min": ..., "max": ...}` |
-| `PUT`  | `/reference_ranges/:id` | Update an existing reference range (by ID) | Yes                   | `{"name": "...", "min": ..., "max": ...}` |
-| `DELETE` | `/reference_ranges/:id` | Delete a reference range (by ID)           | Yes                   | None                                    |
-| `GET`  | `/studies`           | Get all medical studies                      | Yes           | None                                    |
-| `POST` | `/studies`           | Create a new medical study                   | Yes          | `{"name": "...", "description": "..."}`  |
-| `PUT`  | `/studies/:id`       | Update an existing medical study (by ID)     | Yes           | `{"name": "...", "description": "..."}`  |
-| `DELETE` | `/studies/:id`       | Delete a medical study (by ID)             | Yes           | None                                    |
+Create a PostgreSQL database: Use a tool like psql or a GUI like pgAdmin to create the database specified in your .env file.
 
-**Note:** The `/studies` endpoints likely also require authentication, although it's not explicitly stated in the "Features" section.
-
-###  License
-
-MIT — feel free to use, fork, and modify.
+Run Migrations: The backend should automatically create the necessary tables on startup using GORM's AutoMigrate feature based on the defined models. If you encounter issues, ensure your database connection is correct and the models are properly defined in your Go code.
