@@ -88,6 +88,21 @@ function StudyForm({ onSubmit, initialValues, onCancel, editing, referenceRanges
             onChange={handleChange}
           />
         </div>
+        {/* New field for study link */}
+        <div>
+          <label className="block text-gray-700">Study Link:</label>
+          <input
+            className="w-full border rounded px-3 py-2"
+            type="url"
+            name="link"
+            placeholder="https://pubmed.ncbi.nlm.nih.gov/..."
+            value={formData.link || ''}
+            onChange={handleChange}
+          />
+          <small className="text-gray-500">
+            Enter a URL to the study (e.g., a PubMed link).
+          </small>
+        </div>
         <div>
           <label className="block text-gray-700">Reference Ranges:</label>
           <select

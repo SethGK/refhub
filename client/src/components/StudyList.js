@@ -145,7 +145,20 @@ function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
           <tbody>
             {sortedStudies.map((study) => (
               <tr key={study.id}>
-                <td className="px-4 py-2 border">{study.name}</td>
+                <td className="px-4 py-2 border">
+                  {study.link ? (
+                    <a 
+                      href={study.link} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-blue-600 hover:underline"
+                    >
+                      {study.name}
+                    </a>
+                  ) : (
+                    study.name
+                  )}
+                </td>
                 <td className="px-4 py-2 border">{study.description}</td>
                 <td className="px-4 py-2 border">
                   {formatDate(study.publication_date)}

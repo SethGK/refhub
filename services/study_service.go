@@ -1,3 +1,5 @@
+// services/study_service.go
+
 package services
 
 import (
@@ -75,12 +77,13 @@ func UpdateStudy(study *models.Study) error {
 		"name":             study.Name,
 		"description":      study.Description,
 		"publication_date": study.PublicationDate,
+		"link":             study.Link,
 	}).Error; err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	// Clear existing reference range associations.
+	// Clear existing many-to-many reference range associations.
 	if err := tx.Model(&existingStudy).Association("ReferenceRanges").Clear(); err != nil {
 		tx.Rollback()
 		return err
@@ -99,9 +102,27 @@ func UpdateStudy(study *models.Study) error {
 
 // DeleteStudy deletes a study record if it belongs to the given user.
 func DeleteStudy(id uint, userID uint) error {
-	result := database.DB.Where("id = ? AND user_id = ?", id, userID).Delete(&models.Study{})
-	if result.RowsAffected == 0 {
-		return errors.New("study not found or unauthorized")
+	var study models.Study
+	if err := database.DB.Where("id = ? AND user_id = ?", id, userID).First(&study).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return errors.New("study not found or unauthorized")
+		}
+		return err
 	}
-	return result.Error
+
+	tx := database.DB.Begin()
+
+	// Clear many-to-many association
+	if err := tx.Model(&study).Association("ReferenceRanges").Clear(); err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// Delete the study
+	if err := tx.Delete(&study).Error; err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	return tx.Commit().Error
 }
