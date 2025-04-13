@@ -1,53 +1,158 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
-  // Helper to get reference range names from the study object.
-  // If the study includes a full array in "reference_ranges", use it.
-  const getReferenceRangeNames = (study) => {
-    if (study.reference_ranges && study.reference_ranges.length > 0) {
-      return study.reference_ranges.map(rr => rr.analyte_name).join(', ');
-    }
-    // Fallback: if only IDs are available (unlikely if backend preloads), try mapping them.
-    if (study.reference_range_ids && allReferenceRanges) {
-      const names = study.reference_range_ids.map(id => {
-        const rr = allReferenceRanges.find(r => r.id === id);
-        return rr ? rr.analyte_name : null;
-      }).filter(name => name);
-      return names.join(', ');
-    }
-    return 'None';
-  };
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortColumn, setSortColumn] = useState('reference_ranges'); // default sort column
+  const [sortOrder, setSortOrder] = useState('asc'); // asc or desc
 
-  // Format date to be more readable
+  // Helper to format publication date.
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
+  // Helper to get reference range names from a study object.
+  const getReferenceRangeNames = (study) => {
+    if (study.reference_ranges && study.reference_ranges.length > 0) {
+      return study.reference_ranges.map(rr => rr.analyte_name).join(', ');
+    }
+    if (study.reference_range_ids && allReferenceRanges) {
+      const names = study.reference_range_ids
+        .map(id => {
+          const rr = allReferenceRanges.find(r => r.id === id);
+          return rr ? rr.analyte_name : null;
+        })
+        .filter(name => name);
+      return names.join(', ');
+    }
+    return 'None';
+  };
+
+  // Function to compare two studies based on the selected sort column.
+  const compareStudies = (a, b) => {
+    let aVal, bVal;
+    switch (sortColumn) {
+      case 'name':
+        aVal = a.name?.toLowerCase() || '';
+        bVal = b.name?.toLowerCase() || '';
+        break;
+      case 'description':
+        aVal = a.description?.toLowerCase() || '';
+        bVal = b.description?.toLowerCase() || '';
+        break;
+      case 'publication_date':
+        aVal = new Date(a.publication_date).getTime() || 0;
+        bVal = new Date(b.publication_date).getTime() || 0;
+        break;
+      case 'reference_ranges':
+        aVal = getReferenceRangeNames(a).toLowerCase();
+        bVal = getReferenceRangeNames(b).toLowerCase();
+        break;
+      default:
+        aVal = '';
+        bVal = '';
+    }
+    if (aVal < bVal) return sortOrder === 'asc' ? -1 : 1;
+    if (aVal > bVal) return sortOrder === 'asc' ? 1 : -1;
+    return 0;
+  };
+
+  // Handle header click to update sorting.
+  const handleSort = (column) => {
+    if (sortColumn === column) {
+      // Toggle sort order if same column is clicked.
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortColumn(column);
+      setSortOrder('asc'); // default to ascending for a new column
+    }
+  };
+
+  // Render sort indicator (arrow) if the column is active.
+  const renderSortIndicator = (column) => {
+    if (sortColumn !== column) return null;
+    return sortOrder === 'asc' ? ' ▲' : ' ▼';
+  };
+
+  // Filter studies based on the search query.
+  const filteredStudies = studies.filter((study) => {
+    const lowerQuery = searchQuery.toLowerCase();
+    const name = study.name?.toLowerCase() || '';
+    const description = study.description?.toLowerCase() || '';
+    const refRangeNames = getReferenceRangeNames(study).toLowerCase();
+    const publicationDate = formatDate(study.publication_date).toLowerCase();
+
+    return (
+      name.includes(lowerQuery) ||
+      description.includes(lowerQuery) ||
+      refRangeNames.includes(lowerQuery) ||
+      publicationDate.includes(lowerQuery)
+    );
+  });
+
+  // Sort the filtered studies.
+  const sortedStudies = [...filteredStudies].sort(compareStudies);
+
   return (
     <div className="overflow-x-auto">
       <h3 className="text-lg font-semibold mb-4">Study List</h3>
-      {studies.length === 0 ? (
+
+      {/* Search Input */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search studies..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600"
+        />
+      </div>
+
+      {sortedStudies.length === 0 ? (
         <p>No studies found.</p>
       ) : (
         <table className="min-w-full bg-white">
           <thead>
             <tr>
-              <th className="px-4 py-2 border">Name</th>
-              <th className="px-4 py-2 border">Description</th>
-              <th className="px-4 py-2 border">Publication Date</th>
-              <th className="px-4 py-2 border">Reference Ranges</th>
+              <th
+                onClick={() => handleSort('name')}
+                className="cursor-pointer px-4 py-2 border"
+              >
+                Name{renderSortIndicator('name')}
+              </th>
+              <th
+                onClick={() => handleSort('description')}
+                className="cursor-pointer px-4 py-2 border"
+              >
+                Description{renderSortIndicator('description')}
+              </th>
+              <th
+                onClick={() => handleSort('publication_date')}
+                className="cursor-pointer px-4 py-2 border"
+              >
+                Publication Date{renderSortIndicator('publication_date')}
+              </th>
+              <th
+                onClick={() => handleSort('reference_ranges')}
+                className="cursor-pointer px-4 py-2 border"
+              >
+                Reference Ranges{renderSortIndicator('reference_ranges')}
+              </th>
               <th className="px-4 py-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {studies.map((study) => (
+            {sortedStudies.map((study) => (
               <tr key={study.id}>
                 <td className="px-4 py-2 border">{study.name}</td>
                 <td className="px-4 py-2 border">{study.description}</td>
-                <td className="px-4 py-2 border">{formatDate(study.publication_date)}</td>
-                <td className="px-4 py-2 border">{getReferenceRangeNames(study)}</td>
+                <td className="px-4 py-2 border">
+                  {formatDate(study.publication_date)}
+                </td>
+                <td className="px-4 py-2 border">
+                  {getReferenceRangeNames(study)}
+                </td>
                 <td className="px-4 py-2 border">
                   <button
                     onClick={() => onEdit(study.id)}
