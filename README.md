@@ -1,6 +1,6 @@
-# RefRangeHub: Medical Reference Management Platform
+# RefHub: Medical Reference Management Platform
 
-RefRangeHub is a comprehensive web-based solution that enables healthcare professionals and researchers to efficiently manage medical studies, reference ranges, and departmental data. This platform streamlines study organization and reference range tracking to support evidence-based decision-making in clinical settings.
+RefHub is a comprehensive web-based solution that enables healthcare professionals and researchers to efficiently manage medical studies, reference ranges, and departmental data. This platform streamlines study organization and reference range tracking to support evidence-based decision-making in clinical settings.
 
 ## Key Features
 
