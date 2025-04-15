@@ -10,7 +10,6 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // All values are treated as strings now
     setFormData({ 
       ...formData, 
       [name]: value 
@@ -33,7 +32,7 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
       return;
     }
 
-    // Convert pregnancy field to boolean or null:
+    
     let pregnancyValue = null;
     if (formData.pregnancy === 'true') {
       pregnancyValue = true;
@@ -48,7 +47,7 @@ function ReferenceRangeForm({ onSubmit, initialValues, onCancel, editing, depart
       pregnancy: pregnancyValue,
     };
 
-    // When editing, pass the id separately to the onSubmit callback.
+    
     if (editing) {
       onSubmit(formData.id, dataToSubmit);
     } else {

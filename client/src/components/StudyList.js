@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 
 function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [sortColumn, setSortColumn] = useState('reference_ranges'); // default sort column
-  const [sortOrder, setSortOrder] = useState('asc'); // asc or desc
+  const [sortColumn, setSortColumn] = useState('reference_ranges');
+  const [sortOrder, setSortOrder] = useState('asc');
 
-  // Helper to format publication date.
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     const date = new Date(dateString);
     return date.toLocaleDateString();
   };
 
-  // Helper to get reference range names from a study object.
+
   const getReferenceRangeNames = (study) => {
     if (study.reference_ranges && study.reference_ranges.length > 0) {
       return study.reference_ranges.map(rr => rr.analyte_name).join(', ');
@@ -29,7 +29,7 @@ function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
     return 'None';
   };
 
-  // Function to compare two studies based on the selected sort column.
+  
   const compareStudies = (a, b) => {
     let aVal, bVal;
     switch (sortColumn) {
@@ -58,24 +58,22 @@ function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
     return 0;
   };
 
-  // Handle header click to update sorting.
+  
   const handleSort = (column) => {
     if (sortColumn === column) {
-      // Toggle sort order if same column is clicked.
       setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
       setSortColumn(column);
-      setSortOrder('asc'); // default to ascending for a new column
+      setSortOrder('asc');
     }
   };
 
-  // Render sort indicator (arrow) if the column is active.
   const renderSortIndicator = (column) => {
     if (sortColumn !== column) return null;
     return sortOrder === 'asc' ? ' ▲' : ' ▼';
   };
 
-  // Filter studies based on the search query.
+
   const filteredStudies = studies.filter((study) => {
     const lowerQuery = searchQuery.toLowerCase();
     const name = study.name?.toLowerCase() || '';
@@ -91,7 +89,7 @@ function StudyList({ studies, onEdit, onDelete, allReferenceRanges }) {
     );
   });
 
-  // Sort the filtered studies.
+  
   const sortedStudies = [...filteredStudies].sort(compareStudies);
 
   return (

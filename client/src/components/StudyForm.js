@@ -4,25 +4,22 @@ function StudyForm({ onSubmit, initialValues, onCancel, editing, referenceRanges
   const [formData, setFormData] = useState(initialValues);
 
   useEffect(() => {
-    // When editing, transform the reference_ranges array (if present) to just IDs
     if (initialValues && initialValues.reference_ranges) {
       const rangeIds = initialValues.reference_ranges.map(range => range.id);
       setFormData({
         ...initialValues,
-        referenceRanges: rangeIds  // local state uses camelCase for the selected IDs
+        referenceRanges: rangeIds
       });
     } else {
       setFormData(initialValues);
     }
   }, [initialValues]);
 
-  // Standard input change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  // Handler for the multi-select input for reference ranges
   const handleMultiSelectChange = (e) => {
     const options = e.target.options;
     const selected = [];
@@ -36,18 +33,14 @@ function StudyForm({ onSubmit, initialValues, onCancel, editing, referenceRanges
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Basic validation: ensure required fields are set
     if (!formData.name || !formData.description) {
       alert('Please fill in all required fields.');
       return;
     }
-    // Transform the selected IDs (stored in formData.referenceRanges) into an array of objects,
-    // as expected by the backend in the "reference_ranges" field.
     const payload = {
       ...formData,
       reference_ranges: (formData.referenceRanges || []).map(id => ({ id }))
     };
-    // Remove the temporary property that is only used for the multi-select
     delete payload.referenceRanges;
     onSubmit(payload);
   };

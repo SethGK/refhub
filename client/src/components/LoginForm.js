@@ -20,7 +20,7 @@ function LoginForm({ onLogin }) {
       const data = await response.json();
       if (response.ok) {
         onLogin(data.token);
-        navigate('/'); // Redirect to dashboard or home page
+        navigate('/'); // Redirect to dashboard
       } else {
         setMessage(`Login failed: ${data.error}`);
       }

@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 function ReferenceRangeList({ ranges, onEdit, onDelete }) {
   const [searchTerm, setSearchTerm] = useState('');
-  const [sortDirection, setSortDirection] = useState(null); // null, 'asc', or 'desc'
+  const [sortDirection, setSortDirection] = useState(null);
   const [columns, setColumns] = useState([
     { id: 'analyte_name', label: 'Analyte', key: 'analyte_name', sortable: true },
     { id: 'department', label: 'Department', key: 'department' },
@@ -16,16 +16,14 @@ function ReferenceRangeList({ ranges, onEdit, onDelete }) {
     { id: 'note', label: 'Note', key: 'note' }
   ]);
   
-  // For drag and drop functionality
   const draggedItem = useRef(null);
   const dragOverItem = useRef(null);
   
-  // Filter ranges based on search term
+
   let filteredRanges = ranges.filter(range => 
     range.analyte_name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // Apply sorting if sort direction is set
   if (sortDirection) {
     filteredRanges = [...filteredRanges].sort((a, b) => {
       if (sortDirection === 'asc') {
@@ -36,39 +34,31 @@ function ReferenceRangeList({ ranges, onEdit, onDelete }) {
     });
   }
 
-  // Handle drag start
   const handleDragStart = (index) => {
     draggedItem.current = index;
   };
 
-  // Handle drag over
   const handleDragOver = (e, index) => {
     e.preventDefault();
     dragOverItem.current = index;
   };
 
-  // Handle drag end - reorder columns
   const handleDragEnd = () => {
     if (draggedItem.current !== null && dragOverItem.current !== null) {
       const newColumns = [...columns];
       const draggedColumn = newColumns[draggedItem.current];
       
-      // Remove the dragged item
       newColumns.splice(draggedItem.current, 1);
       
-      // Add it at the new position
       newColumns.splice(dragOverItem.current, 0, draggedColumn);
       
-      // Update state
       setColumns(newColumns);
       
-      // Reset refs
       draggedItem.current = null;
       dragOverItem.current = null;
     }
   };
 
-  // Toggle sort direction
   const toggleSort = () => {
     if (sortDirection === null) {
       setSortDirection('asc');
@@ -79,14 +69,12 @@ function ReferenceRangeList({ ranges, onEdit, onDelete }) {
     }
   };
 
-  // Helper for pregnancy display
   const renderPregnancyValue = (value) => {
     if (value === true) return 'Pregnant';
     if (value === false) return 'Not Pregnant';
     return 'N/A';
   };
 
-  // Render sort icon based on current sort direction
   const renderSortIcon = () => {
     if (sortDirection === null) {
       return (
