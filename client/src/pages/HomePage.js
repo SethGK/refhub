@@ -13,7 +13,7 @@ function HomePage() {
             Welcome to RefHub
           </h2>
           <p className="text-lg text-gray-600">
-            The all-in-one platform for managing your medical studies and reference ranges.
+            An integrated platform designed to streamline the management of medical studies and standardized reference ranges.
           </p>
         </div>
 
@@ -27,7 +27,7 @@ function HomePage() {
               </svg>
               <h3 className="text-xl font-semibold text-gray-800 mb-2">Studies</h3>
               <p className="text-gray-600 text-center">
-                Manage your medical studies and track reference ranges with ease.
+                Manage medical studies and their associated reference ranges.
               </p>
             </div>
           </Link>

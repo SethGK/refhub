@@ -107,7 +107,7 @@ function StudiesPage({ token }) {
     name: '',
     description: '',
     publication_date: '',
-    referenceRanges: [] // local field to track selected reference range IDs
+    referenceRanges: []
   };
 
   const studyToEdit = editingStudyId
