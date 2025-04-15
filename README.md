@@ -1,104 +1,73 @@
-# 🧪 RefRangeHub - Medical Reference Management Platform
+# RefRangeHub: Medical Reference Management Platform
 
-RefRangeHub is a web-based platform designed to help healthcare professionals and researchers efficiently manage medical studies, reference ranges, and departmental data. It provides robust tools to organize studies, track analyte-specific reference ranges, and categorize data by departments.
+RefRangeHub is a comprehensive web-based solution that enables healthcare professionals and researchers to efficiently manage medical studies, reference ranges, and departmental data. This platform streamlines study organization and reference range tracking to support evidence-based decision-making in clinical settings.
 
----
+## Key Features
 
-## ✨ Features
+- **Secure Authentication**: JWT token-based login system with protected user registration
+- **Reference Range Management**: Create, view, update, and delete reference ranges with comprehensive filtering options by department, analyte, age, sex, and pregnancy status
+- **Study Management**: Organize medical studies and link them with relevant reference ranges
+- **Department Organization**: Efficiently categorize and manage departmental data
 
-### 🔐 User Authentication
-- Secure registration and login
-- JWT token-based authentication
+## Screenshots
 
-### 📊 Reference Range Management
-- Create, view, update, and delete reference ranges
-- Associate reference ranges with departments
-- Filter and sort reference ranges by department
-  - Filter reference ranges by department, analyte name, and study.
-  - Sort reference ranges by analyte name, age, and date.
-- Specify reference ranges with detailed parameters:
-  - Analyte name and unit.
-  - Lower and upper bounds.
-  - General notes.
-  - Department association.
-  - Age range (min and max).
-  - Sex specification.
-  - Pregnancy status.
-  - Link to related studies.
+### Reference Range Management  
+![Reference Range Form](./screenshots/ReferenceRangeForm.png)  
+![Reference Range List](./screenshots/ReferenceRangeList.png)
 
-### 📚 Study Management
-- Create, view, update, and delete medical studies
-- Link reference ranges to specific studies
-- Provide study details:
-  - Study name and description.
-  - Publication date.
-  - Link to external resources.
-  - Associated reference ranges.
+### Study Management  
+![Studies List and Form](./screenshots/StudiesListAndForm.png)
 
-### 🏥 Department Management
-- Create, view, and delete departments
-- Categorize reference ranges by department
+### Dashboard  
+![Dashboard](./screenshots/Dashboard.png)
 
----
+## Technology Stack
 
-## 🛠️ Technologies Used
+- **Backend**: Go, Gin, GORM, PostgreSQL, JWT
+- **Frontend**: React, Tailwind CSS
 
-### Backend
-- **Go** – Core backend language
-- **Gin** – Web framework for routing and middleware
-- **GORM** – ORM for PostgreSQL
-- **PostgreSQL** – Relational database
-- **JWT** – JSON Web Token authentication
-
-### Frontend
-- **React** – Dynamic frontend interface
-- **Tailwind CSS** - Styling
-
----
-
-## ⚙️ Setup Instructions
+## Setup Instructions
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+- Go [Download](https://golang.org/dl/)
+- PostgreSQL [Download](https://www.postgresql.org/download/)
+- Node.js & npm [Download](https://nodejs.org/en/download/)
 
-- **Go:** [https://golang.org/dl/](https://golang.org/dl/)
-- **PostgreSQL:** [https://www.postgresql.org/download/](https://www.postgresql.org/download/)
-- **Node.js and npm:** [https://nodejs.org/](https://nodejs.org/) (for the React frontend)
-- **.env file:** Create a `.env` file in the backend root directory and add the following:
-  ```
-  DATABASE_URL=postgres://your_user:your_password@your_host:your_port/your_database
-  ```
-  Replace `your_user`, `your_password`, `your_host`, `your_port`, and `your_database` with your PostgreSQL credentials.
+### Environment Configuration
 
-### 1. Backend Setup
-
-```bash
-# Clone the repository
-git clone <repository_url>
-cd backend  # Navigate to the backend directory
-
-# Install Go dependencies
-go mod tidy
-
-# Run the backend server
-go run main.go
+Create a `.env` file in the backend root directory:
+```
+DATABASE_URL=postgres://your_user:your_password@your_host:your_port/your_database
 ```
 
-### 2. Frontend Setup
+### Installation
 
-```bash
-cd frontend # Navigate to the frontend directory
+1. **Backend Setup**
+   ```
+   git clone https://github.com/SethGK/refhub.git
+   cd refhub
+   go mod tidy
+   go run main.go
+   ```
 
-# Install Node.js dependencies
-npm install
+2. **Frontend Setup**
+   ```
+   cd refhub/client
+   npm install
+   npm start
+   ```
 
-# Start the frontend development server
-npm start
-```
+3. **Database Setup**
+   - Create a PostgreSQL database using psql or pgAdmin
+   - GORM's AutoMigrate functionality will create the necessary tables on application startup
 
-### 3. Database Setup
+## Contributing
 
-Create a PostgreSQL database: Use a tool like psql or a GUI like pgAdmin to create the database specified in your .env file.
+Contributions are welcome. Please follow these steps:
 
-Run Migrations: The backend should automatically create the necessary tables on startup using GORM's AutoMigrate feature based on the defined models. If you encounter issues, ensure your database connection is correct and the models are properly defined in your Go code.
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/YourFeatureName`
+3. Commit your changes: `git commit -m "Add: description of your feature"`
+4. Push to your branch: `git push origin feature/YourFeatureName`
+5. Open a pull request with a detailed description of your changes
